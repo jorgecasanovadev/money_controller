@@ -12,7 +12,7 @@ class AddingPage extends StatefulWidget {
 
 class _AddingPageState extends State<AddingPage> {
   String category = '';
-  int value = 0;
+  double value = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +68,10 @@ class _AddingPageState extends State<AddingPage> {
   }
 
   Widget _currentValue() {
-    var realValue = value / 100;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       child: Text(
-        '\$${realValue.toStringAsFixed(2)}',
+        '\$${value.toStringAsFixed(2)}',
         style: const TextStyle(
           fontSize: 50.0,
           color: Colors.blueAccent,
@@ -86,9 +85,7 @@ class _AddingPageState extends State<AddingPage> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        (text == ',')
-            ? value = value * 100
-            : value = value * 10 + int.parse(text);
+        value = value * 10 + int.parse(text);
         setState(() {});
       },
       child: SizedBox(
@@ -145,7 +142,7 @@ class _AddingPageState extends State<AddingPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      value = value ~/ 10;
+                      value = value ~/ 10 + (value - value.toInt());
                       setState(() {});
                     },
                     child: SizedBox(
