@@ -28,7 +28,8 @@ class MonthWidget extends StatefulWidget {
           }
 
           //TODO:  no es " = " es " += "
-          map[document['category']] = document['value'] * 1.0;
+          map[document['category']] =
+              map[document['category']]! + document['value'];
           return map;
         }),
         super(key: key);
@@ -79,7 +80,7 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _graph() {
     return SizedBox(
-      height: 250,
+      height: 200,
       child: GraphWidget(
         data: widget.perDay,
       ),

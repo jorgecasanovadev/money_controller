@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:money_controller/screens/addings/adding_page.dart';
 import 'package:money_controller/screens/home/home_page.dart';
 
 void main() async {
@@ -18,7 +19,10 @@ class MyApp extends StatelessWidget {
       title: 'Controlador de dinero',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: Colors.blue),
-      home: const HomePage(),
+      routes: {
+        '/': (BuildContext context) => const HomePage(),
+        '/add': (BuildContext context) => const AddingPage(),
+      },
     );
   }
 }
