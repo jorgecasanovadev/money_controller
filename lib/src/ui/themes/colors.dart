@@ -184,6 +184,7 @@ const Color black100 = Color(0xFF0F1419);
 const Color black38 = Colors.black38;
 const Color black = Colors.black;
 const Color blue500 = Color(0xff3600ff);
+const Color blueFacebook = Color.fromRGBO(66, 103, 178, 0.0);
 const Color yellow100 = Color(0xffFEED00);
 
 const Color orange50 = Color(0xffEB7923);
