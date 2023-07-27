@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money_controller/src/ui/components/custom_primary_button.dart.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:money_controller/src/ui/components/buttons/custom_primary_button.dart.dart';
+import 'package:money_controller/src/ui/components/views/logo_view.dart';
 
 import '../../themes/themes.dart';
 
@@ -9,8 +11,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.sizeOf(context);
-
     return Scaffold(
       backgroundColor: grey200.withOpacity(0.5),
       body: SafeArea(
@@ -22,31 +22,32 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/logos/money-logo.png',
-                    width: media.width * 0.2,
-                    fit: BoxFit.contain,
-                    color: Colors.white.withOpacity(0.8),
-                    colorBlendMode: BlendMode.modulate,
-                  ),
-                  FittedBox(
-                    fit: BoxFit.fill,
-                    child: Text(
-                      'Money Controller',
-                      textAlign: TextAlign.center,
-                      style: TypographyStyle.h3.w900.white.copyWith(
-                        fontFamily: 'Houston',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              const LogoView(),
               const Spacer(),
+              const SizedBox(height: 15.0),
               CustomPrimaryButton(
+                hasIconButton: true,
+                iconButton: const Icon(Icons.apple_outlined, size: 30.0),
+                title: 'Sign up with Apple',
+                onPressed: () {},
+                foregroundColor: white,
+                backgroundColor: black.withOpacity(0.6),
+                titleTextStyle: TypographyStyle.st165,
+              ),
+              const SizedBox(height: 15.0),
+              CustomPrimaryButton(
+                hasIconButton: true,
+                iconButton: const Icon(FontAwesomeIcons.google, size: 25.0),
+                title: 'Sign up with Google',
+                onPressed: () {},
+                foregroundColor: black50,
+                backgroundColor: white,
+                titleTextStyle: TypographyStyle.st165,
+              ),
+              const SizedBox(height: 15.0),
+              CustomPrimaryButton(
+                hasIconButton: true,
+                iconButton: const Icon(Icons.facebook_outlined, size: 30.0),
                 title: 'Sign up with Facebook',
                 onPressed: () {},
                 foregroundColor: white,
@@ -62,7 +63,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 25.0),
               CustomPrimaryButton(
                 title: 'Sign up with e-mail',
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, '/sign_in_up'),
                 foregroundColor: white,
                 backgroundColor: grey100,
                 titleTextStyle: TypographyStyle.st165,

@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+
+import '../../themes/themes.dart';
+
+class StaticSeparatorLine extends StatelessWidget {
+  const StaticSeparatorLine({
+    super.key,
+    required this.separatorCounter,
+  });
+
+  final int separatorCounter;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(
+        separatorCounter,
+        (index) => Expanded(
+          child: Container(
+            height: 5,
+            margin: const EdgeInsets.symmetric(horizontal: 1),
+            decoration: const BoxDecoration(color: grey100),
+          ),
+        ),
+      ),
+    );
+  }
+}

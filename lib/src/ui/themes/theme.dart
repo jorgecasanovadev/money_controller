@@ -104,6 +104,10 @@ abstract class TypographyStyle {
     fontSize: 60,
     fontWeight: FontWeight.w900,
   );
+  static TextStyle h25 = textStyle.copyWith(
+    fontSize: 50,
+    fontWeight: FontWeight.w900,
+  );
   static TextStyle h3 = textStyle.copyWith(
     fontSize: 40,
     fontWeight: FontWeight.w900,
