@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_controller/src/ui/screens/home/views/home_view.dart';
-import 'package:money_controller/src/ui/screens/home/views/dashboard_view.dart';
 import 'package:money_controller/src/ui/screens/home/views/calendar_view.dart';
 import 'package:money_controller/src/ui/screens/home/views/page3.dart';
+import 'package:money_controller/src/ui/screens/home/views/spending_budget_view.dart';
 
 import '../../themes/themes.dart';
 
@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentTab = 0;
   final List<Widget> screens = [
     const HomeView(),
-    const DashboardView(),
+    const SpendingBudgetView(),
     const CalendarView(),
     const Page3(),
   ];
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomAppBar(
         notchMargin: 8.0,
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        color: bluegrey.withOpacity(0.2),
+        color: bluegrey.withOpacity(0.3),
         shape: const CircularNotchedRectangle(),
         child: SizedBox(
           height: 50.0,
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: IconButton(
                         iconSize: currentTab == 1 ? 30 : 25,
                         onPressed: () {
-                          currentScreen = const DashboardView();
+                          currentScreen = const SpendingBudgetView();
                           currentTab = 1;
                           setState(() {});
                         },

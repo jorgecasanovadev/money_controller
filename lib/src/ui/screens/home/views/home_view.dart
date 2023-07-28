@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:money_controller/src/ui/screens/home/components/view_tabs/arc_painter_view.dart';
 import 'package:money_controller/src/ui/components/views/logo_view.dart';
 import 'package:money_controller/src/ui/screens/home/components/buttons/custom_segment_button.dart';
 import 'package:money_controller/src/ui/screens/home/components/buttons/custom_status_button.dart';
-import 'package:money_controller/src/ui/screens/home/components/view-tabs/subscription_tab.dart';
-import 'package:money_controller/src/ui/screens/home/components/view-tabs/upcoming_bill_tab.dart';
+import 'package:money_controller/src/ui/screens/home/components/view_tabs/subscription_tab.dart';
+import 'package:money_controller/src/ui/screens/home/components/view_tabs/upcoming_bill_tab.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
 
 class HomeView extends StatefulWidget {
@@ -64,6 +65,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
+    const double maxExpenses = 2000.0;
+    const double currentBills = 1358.50;
 
     return Scaffold(
       backgroundColor: grey200.withOpacity(0),
@@ -73,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
             Container(
               height: media.width * 1.1,
               decoration: BoxDecoration(
-                color: bluegrey.withOpacity(0.15),
+                color: bluegrey.withOpacity(0.3),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(25.0),
                   bottomRight: Radius.circular(25.0),
@@ -82,25 +85,44 @@ class _HomeViewState extends State<HomeView> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Image.asset('assets/logos/foreground-green.png'),
+                  Image.asset('assets/imgs/home_bg.png'),
+                  Container(
+                    padding: EdgeInsets.only(bottom: media.width * 0.05),
+                    width: media.width * 0.72,
+                    height: media.width * 0.72,
+                    child: CustomPaint(
+                      painter: ArcPainterView(
+                        start: currentBills,
+                        end: maxExpenses,
+                        blurWidth: 6,
+                        drawArcs: [
+                          ArcModel(
+                            color: darkBlueGrey,
+                            value: 0,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      SizedBox(height: media.width * 0.05),
                       LogoView(
-                        width: media.width * 0.1,
+                        width: media.width * 0.13,
                         fontSize: 25,
                       ),
-                      const SizedBox(height: 8.0),
+                      SizedBox(height: media.width * 0.05),
                       Text(
-                        '\$1,650',
+                        '\$1,358.50',
                         style: TypographyStyle.h3.white,
                       ),
-                      const SizedBox(height: 8.0),
+                      SizedBox(height: media.width * 0.05),
                       Text(
                         'This month bills',
                         style: TypographyStyle.b1.grey100,
                       ),
-                      const SizedBox(height: 25.0),
+                      SizedBox(height: media.width * 0.04),
                       InkWell(
                         borderRadius: BorderRadius.circular(12.0),
                         splashColor: null,

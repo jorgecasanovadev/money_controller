@@ -186,6 +186,7 @@ const Color black = Colors.black;
 const Color blue500 = Color(0xff3600ff);
 const Color blueFacebook = Color.fromRGBO(66, 103, 178, 0.0);
 const Color yellow100 = Color(0xffFEED00);
+const Color purple100 = Color(0xff8F00FF);
 
 const Color orange50 = Color(0xffEB7923);
 const Color orange100 = Color(0xffE0726A);
@@ -258,6 +259,7 @@ class AppColors {
   static const Color black54 = Colors.black54;
   static const Color blue500 = Color(0xff3600ff);
   static const Color yellow100 = Color(0xffFEED00);
+  static const Color purple100 = Color(0xff8F00FF);
   static const Color orange50 = Color(0xffEB7923);
   static const Color orange100 = Color(0xffE0726A);
   static const Color orange200 = Color(0xffE4733A);
