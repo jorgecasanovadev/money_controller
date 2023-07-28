@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -65,9 +67,13 @@ class _SpendingBudgetViewState extends State<SpendingBudgetView> {
       arcModels.add(
         ArcModel(
           color: budget['color'],
-          value: double.parse(budget['left_amount']),
+          // value: maxExpenses - double.parse(budget['left_amount']),
+          value: maxExpenses - double.parse(budget['spend_amount']),
         ),
       );
+    }
+    for (var arcModel in arcModels) {
+      log('values: ${arcModel.value}');
     }
   }
 
@@ -92,7 +98,6 @@ class _SpendingBudgetViewState extends State<SpendingBudgetView> {
             Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                // for (var budget in budgets)
                 SizedBox(
                   width: media.width * 0.5,
                   height: media.width * 0.3,
@@ -102,7 +107,7 @@ class _SpendingBudgetViewState extends State<SpendingBudgetView> {
                       width: 12.0,
                       bgWidth: 9.0,
                       blurWidth: 2.0,
-                      end: 550,
+                      end: maxExpenses,
                       drawArcs: arcModels,
                     ),
                   ),

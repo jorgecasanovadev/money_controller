@@ -92,14 +92,10 @@ class _HomeViewState extends State<HomeView> {
                     height: media.width * 0.72,
                     child: CustomPaint(
                       painter: ArcPainterView(
-                        start: currentBills,
                         end: maxExpenses,
                         blurWidth: 6,
                         drawArcs: [
-                          ArcModel(
-                            color: darkBlueGrey,
-                            value: 0,
-                          ),
+                          ArcModel(color: darkBlueGrey, value: currentBills),
                         ],
                       ),
                     ),

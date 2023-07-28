@@ -11,7 +11,6 @@ class ArcModel {
 
 class ArcPainterView extends CustomPainter {
   ArcPainterView({
-    this.start = 0,
     this.end = 270,
     this.width = 15,
     this.bgWidth = 10,
@@ -21,7 +20,6 @@ class ArcPainterView extends CustomPainter {
     this.space = 5,
   });
 
-  final double start;
   final double end;
   final double width;
   final double bgWidth;
@@ -46,21 +44,21 @@ class ArcPainterView extends CustomPainter {
     backgroundPaint.strokeWidth = (is180Arc ? bgWidth : width);
     backgroundPaint.strokeCap = StrokeCap.round;
 
-    // Variables converted
-    double initial = (start / end) + (is180Arc ? 180 : 135);
-    double drawStart = initial;
-    double activeDegrees = (start / end) * (is180Arc ? 180 : 270);
-
     // InActive drawer
     canvas.drawArc(
       rect,
-      radians(initial),
+      radians(is180Arc ? 180 : 135),
       radians(is180Arc ? 180 : 270),
       false,
       backgroundPaint,
     );
 
     for (ArcModel drawArc in drawArcs ?? []) {
+      // Variables converted
+      double initial = (drawArc.value / end) + (is180Arc ? 180 : 135);
+      double drawStart = initial;
+      double activeDegrees = (drawArc.value / end) * (is180Arc ? 180 : 270);
+
       Paint activePaint = Paint();
       activePaint.color = drawArc.color;
       activePaint.style = PaintingStyle.stroke;
@@ -75,8 +73,6 @@ class ArcPainterView extends CustomPainter {
 
       // Draw Shadow Arc
       Path path = Path();
-      double drawActiveDegrees = (drawArc.value / end) * 180;
-      double drawArcValue = drawArc.value / end;
 
       if (!is180Arc) {
         path.addArc(rect, radians(initial), radians(activeDegrees + 1));
@@ -91,23 +87,19 @@ class ArcPainterView extends CustomPainter {
         );
       }
       if (is180Arc) {
-        path.addArc(
-          rect,
-          radians(drawStart),
-          radians(drawActiveDegrees - space),
-        );
+        path.addArc(rect, radians(drawStart), radians(activeDegrees - space));
         canvas.drawPath(path, shadowPaint);
         // Active drawer
         canvas.drawArc(
           rect,
           radians(drawStart),
-          radians(drawActiveDegrees),
+          radians(activeDegrees - space),
           false,
           activePaint,
         );
       }
 
-      drawStart = drawStart + drawArcValue + space;
+      drawStart = drawStart + space; //(drawArc.value / end) + space;
     }
   }
 
