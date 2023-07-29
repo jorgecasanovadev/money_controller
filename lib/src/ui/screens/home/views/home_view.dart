@@ -227,10 +227,10 @@ class _HomeViewState extends State<HomeView> {
                 shrinkWrap: true,
                 itemCount: subscriptions.length,
                 itemBuilder: (context, index) {
-                  var subscriptionObject = subscriptions[index];
+                  var subscription = subscriptions[index];
                   return SubscriptionTab(
                     onPressed: () {},
-                    subscriptionObject: subscriptionObject,
+                    subscription: subscription,
                   );
                 },
               ),
@@ -241,10 +241,10 @@ class _HomeViewState extends State<HomeView> {
                 shrinkWrap: true,
                 itemCount: subscriptions.length,
                 itemBuilder: (context, index) {
-                  var subscriptionObject = subscriptions[index];
+                  var subscription = subscriptions[index];
                   return UpcomingBillTab(
                     onPressed: () {},
-                    subscriptionObject: subscriptionObject,
+                    subscription: subscription,
                   );
                 },
               ),

@@ -105,7 +105,6 @@ class _SpendingBudgetViewState extends State<SpendingBudgetView> {
                     painter: ArcPainterView(
                       is180Arc: true,
                       width: 12.0,
-                      bgWidth: 9.0,
                       blurWidth: 2.0,
                       end: maxExpenses,
                       drawArcs: arcModels,

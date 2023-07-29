@@ -6,11 +6,11 @@ class UpcomingBillTab extends StatelessWidget {
   const UpcomingBillTab({
     super.key,
     required this.onPressed,
-    required this.subscriptionObject,
+    required this.subscription,
   });
 
   final VoidCallback onPressed;
-  final Map<String, dynamic> subscriptionObject;
+  final Map<String, dynamic> subscription;
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +57,13 @@ class UpcomingBillTab extends StatelessWidget {
               const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
-                  subscriptionObject['name'],
+                  subscription['name'],
                   style: TypographyStyle.b2.w600.white,
                 ),
               ),
               const SizedBox(width: 8.0),
               Text(
-                '\$${subscriptionObject['price']}',
+                '\$${subscription['price']}',
                 style: TypographyStyle.b2.w600.white,
               ),
             ],

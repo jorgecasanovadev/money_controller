@@ -50,9 +50,9 @@ class MyApp extends StatelessWidget {
           secondary: mainSecondary,
         ),
       ),
-      // localizationsDelegates: context.localizationDelegates,
-      // supportedLocales: context.supportedLocales,
-      // locale: context.locale,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
