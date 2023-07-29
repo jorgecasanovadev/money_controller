@@ -234,6 +234,7 @@ Color bluegrey700 = Colors.blueGrey[700]!;
 
 const Color greyPrimary = Colors.grey;
 const Color grey = Color(0xffF0EEEE);
+const Color greyColors = Color(0xff9E9E9E);
 const Color grey50 = Color(0xffCFD9DE);
 const Color grey70 = Color(0xffCFD2D8);
 const Color grey100 = Color(0xff6E767D);

@@ -2,44 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
+import 'package:money_controller/src/ui/utils/date_formatter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../calendar_package.dart';
 import 'full_calendar.dart';
 
 class CustomCalendar extends StatefulWidget implements PreferredSizeWidget {
+  // Calendar controller variables
   final CalendarController? controller;
+  final FullCalendarScroll fullCalendarScroll;
+  final List<DateTime>? events;
 
+  // DateTime variables
   final DateTime initialDate;
   final DateTime firstDate;
   final DateTime lastDate;
   final Function onDateSelected;
 
-  final Color? backgroundColor;
-  final SelectedDayPosition selectedDayPosition;
-  final Color? selectedDateColor;
+  // Design variables
+  final bool appbar;
+  final Widget? leading;
+  final double? padding;
+  final double leftMargin;
   final Color? dateColor;
-  final Color? headerDateColor;
-  final Color? calendarBackground;
+  final Color? backgroundColor;
+  final Color? selectedDateColor;
+  final Color? unselectedDateColor;
   final Color? calendarEventSelectedColor;
   final Color? calendarEventColor;
-  final FullCalendarScroll fullCalendarScroll;
-  final Widget? calendarLogo;
-  final Widget? selectedDayLogo;
-  final Widget? eventLogo;
-  final Widget? selectedEventLogo;
+  final Widget? eventIcon;
+  final Widget? selectedEventIcon;
   final Decoration? decoration;
   final Decoration? selectedDecoration;
 
-  final String? locale;
+  // Use calendar variables
   final bool? fullCalendar;
-  final WeekDay fullCalendarDay;
-  final double? padding;
-  final Widget? leading;
+  final String? locale;
   final WeekDay weekDay;
-  final bool appbar;
-  final double leftMargin;
-  final List<DateTime>? events;
+  final WeekDay fullCalendarDay;
+  final SelectedDayPosition selectedDayPosition;
 
   CustomCalendar({
     Key? key,
@@ -47,20 +49,17 @@ class CustomCalendar extends StatefulWidget implements PreferredSizeWidget {
     required this.firstDate,
     required this.lastDate,
     required this.onDateSelected,
-    this.backgroundColor,
-    this.selectedDayLogo,
-    this.eventLogo,
-    this.selectedEventLogo,
+    this.eventIcon,
+    this.selectedEventIcon,
     this.decoration,
     this.selectedDecoration,
     this.controller,
-    this.selectedDateColor = Colors.black,
-    this.dateColor = Colors.white,
-    this.headerDateColor = Colors.white,
-    this.calendarBackground = Colors.white,
-    this.calendarEventSelectedColor = Colors.white,
-    this.calendarEventColor = Colors.blue,
-    this.calendarLogo,
+    this.backgroundColor,
+    this.dateColor = white,
+    this.selectedDateColor = black,
+    this.unselectedDateColor = white,
+    this.calendarEventSelectedColor = white,
+    this.calendarEventColor = blue500,
     this.locale = 'en',
     this.padding,
     this.leading,
@@ -72,6 +71,7 @@ class CustomCalendar extends StatefulWidget implements PreferredSizeWidget {
     this.fullCalendarDay = WeekDay.short,
     this.weekDay = WeekDay.short,
     this.selectedDayPosition = SelectedDayPosition.left,
+    //TODO: change to translations
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
@@ -102,10 +102,10 @@ class CustomCalendarState extends State<CustomCalendar>
   late Widget leading;
   late double _scrollAlignment;
 
-  final List<String> _eventDates = [];
-  List<DateTime> _dates = [];
-  DateTime? _selectedDate;
   int? _daySelectedIndex;
+  DateTime? _selectedDate;
+  List<DateTime> _dates = [];
+  final List<String> _eventDates = [];
 
   String get _locale =>
       widget.locale ?? Localizations.localeOf(context).languageCode;
@@ -120,8 +120,8 @@ class CustomCalendarState extends State<CustomCalendar>
     _scrollAlignment = widget.leftMargin / 440;
 
     if (widget.events != null) {
-      for (var element in widget.events!) {
-        _eventDates.add(element.toString().split(" ").first);
+      for (var event in widget.events!) {
+        _eventDates.add(event.toString().split(" ").first);
       }
     }
   }
@@ -133,7 +133,7 @@ class CustomCalendarState extends State<CustomCalendar>
     Widget dayList() {
       return Container(
         width: MediaQuery.of(context).size.width,
-        height: widget.appbar ? 125 : 110,
+        height: widget.appbar ? 125 : 120,
         padding: const EdgeInsets.all(5.0),
         alignment: Alignment.bottomCenter,
         child: ScrollablePositionedList.builder(
@@ -144,15 +144,14 @@ class CustomCalendarState extends State<CustomCalendar>
                       10)
               : const EdgeInsets.symmetric(horizontal: 10),
           initialScrollIndex: _daySelectedIndex ?? 0,
-          // initialAlignment: _scrollAlignment,
           initialAlignment:
               widget.selectedDayPosition == SelectedDayPosition.center
                   ? 78 / 200
                   : _scrollAlignment,
-          scrollDirection: Axis.horizontal,
           reverse: widget.selectedDayPosition == SelectedDayPosition.left
               ? false
               : true,
+          scrollDirection: Axis.horizontal,
           itemScrollController: _scrollController,
           physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
@@ -162,85 +161,77 @@ class CustomCalendarState extends State<CustomCalendar>
             DateTime date = _dates[index];
             bool isSelected = _daySelectedIndex == index;
 
-            return Container(
-              child: Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 5.0,
-                  ),
-                  child: GestureDetector(
-                    onTap: () => _goToActualDay(index),
-                    child: Container(
-                      height: 120.0,
-                      width: (widget.weekDay == WeekDay.long)
-                          ? MediaQuery.of(context).size.width / 5 - 10
-                          : MediaQuery.of(context).size.width / 7 - 10,
-                      decoration: isSelected &&
-                              widget.selectedDecoration != null
-                          ? widget.selectedDecoration!
-                          : !isSelected && widget.decoration != null
-                              ? widget.decoration!
-                              : BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: isSelected ? Colors.white : null,
-                                  boxShadow: [
-                                    isSelected
-                                        ? BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.2),
-                                            spreadRadius: 1,
-                                            blurRadius: 10,
-                                            offset: const Offset(0, 3),
-                                          )
-                                        : BoxShadow(
-                                            color: Colors.grey.withOpacity(0.0),
-                                            spreadRadius: 5,
-                                            blurRadius: 20,
-                                            offset: const Offset(0, 3),
-                                          ),
-                                  ],
-                                ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20.0),
-                          Text(
-                            DateFormat("dd").format(date),
-                            style: TextStyle(
-                              fontSize: 22.0,
-                              color: isSelected
-                                  ? widget.selectedDateColor
-                                  : widget.headerDateColor,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 5.0),
-                          Text(
-                              widget.weekDay == WeekDay.long
-                                  ? DateFormat.EEEE(Locale(_locale).toString())
-                                      .format(date)
-                                  : DateFormat.E(Locale(_locale).toString())
-                                      .format(date),
-                              style: isSelected
-                                  ? TypographyStyle.overline
-                                      .copyWith(color: widget.selectedDateColor)
-                                  : TypographyStyle.overline.w400
-                                      .copyWith(color: widget.headerDateColor)),
-                          const Spacer(),
-                          _eventDates.contains(date.toString().split(" ").first)
-                              ? isSelected && widget.selectedEventLogo != null
-                                  ? widget.selectedEventLogo!
-                                  : !isSelected && widget.eventLogo != null
-                                      ? widget.eventLogo!
-                                      : const SizedBox(height: 5.0)
-                              : const SizedBox(height: 5.0),
-                          const Spacer(),
-                        ],
-                      ),
+            return Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5.0,
+                  horizontal: 5.0,
+                ),
+                child: GestureDetector(
+                  onTap: () => _goToActualDay(index),
+                  child: Container(
+                    height: 120.0,
+                    width: (widget.weekDay == WeekDay.long)
+                        ? MediaQuery.of(context).size.width / 5 - 10
+                        : MediaQuery.of(context).size.width / 7 - 10,
+                    decoration: isSelected && widget.selectedDecoration != null
+                        ? widget.selectedDecoration!
+                        : !isSelected && widget.decoration != null
+                            ? widget.decoration!
+                            : BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: isSelected ? white : null,
+                                boxShadow: [
+                                  isSelected
+                                      ? BoxShadow(
+                                          color: black.withOpacity(0.2),
+                                          spreadRadius: 1,
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 3),
+                                        )
+                                      : BoxShadow(
+                                          color: greyColors.withOpacity(0.0),
+                                          spreadRadius: 5,
+                                          blurRadius: 20,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                ],
+                              ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 12.0),
+                        Text(
+                          DateFormat("dd").format(date),
+                          style: isSelected
+                              ? TypographyStyle.h9
+                                  .copyWith(color: widget.selectedDateColor)
+                              : TypographyStyle.h9.w500
+                                  .copyWith(color: widget.unselectedDateColor),
+                        ),
+                        Text(
+                          widget.weekDay == WeekDay.long
+                              ? DateFormat.EEEE(Locale(_locale).toString())
+                                  .format(date)
+                              : DateFormat.E(Locale(_locale).toString())
+                                  .format(date),
+                          style: isSelected
+                              ? TypographyStyle.overline
+                                  .copyWith(color: widget.selectedDateColor)
+                              : TypographyStyle.overline.w400
+                                  .copyWith(color: widget.unselectedDateColor),
+                        ),
+                        const Spacer(),
+                        _eventDates.contains(date.toString().split(" ").first)
+                            ? isSelected && widget.selectedEventIcon != null
+                                ? widget.selectedEventIcon!
+                                : !isSelected && widget.eventIcon != null
+                                    ? widget.eventIcon!
+                                    : const SizedBox(height: 5.0)
+                            : const SizedBox(height: 5.0),
+                        const Spacer(),
+                      ],
                     ),
                   ),
                 ),
@@ -264,48 +255,6 @@ class CustomCalendarState extends State<CustomCalendar>
               color: backgroundColor,
             ),
           ),
-          // Positioned(
-          //   top: widget.appbar ? 50.0 : 20.0,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(right: padding, left: 10),
-          //     child: SizedBox(
-          //       width: MediaQuery.of(context).size.width - padding,
-          //       child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         children: [
-          //           leading,
-          //           widget.fullCalendar!
-          //               ? GestureDetector(
-          //                   onTap: () => widget.fullCalendar!
-          //                       ? showFullCalendar()
-          //                       : null,
-          //                   child: Row(
-          //                     children: [
-          //                       const Icon(
-          //                         Icons.calendar_today,
-          //                         size: 18.0,
-          //                         color: Colors.white,
-          //                       ),
-          //                       const SizedBox(width: 10.0),
-          //                       Text(
-          //                         DateFormat.yMMMM(Locale(_locale).toString())
-          //                             .format(_selectedDate!),
-          //                         style: const TextStyle(
-          //                           fontSize: 18.0,
-          //                           color: Colors.white,
-          //                           fontWeight: FontWeight.w400,
-          //                         ),
-          //                         textAlign: TextAlign.end,
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 )
-          //               : const SizedBox(),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Positioned(
             bottom: 0.0,
             child: dayList(),
@@ -318,18 +267,14 @@ class CustomCalendarState extends State<CustomCalendar>
   _generateDates() {
     _dates.clear();
 
-    DateTime first = DateTime.parse(
-        "${widget.firstDate.toString().split(" ").first} 00:00:00.000");
-
-    DateTime last = DateTime.parse(
-        "${widget.lastDate.toString().split(" ").first} 23:00:00.000");
-
-    DateTime basicDate =
-        DateTime.parse("${first.toString().split(" ").first} 12:00:00.000");
+    DateTime first = DateFormatter.formatByTimeHour(widget.firstDate, '00');
+    DateTime last = DateFormatter.formatByTimeHour(widget.lastDate, '23');
+    DateTime basicDate = DateFormatter.basicDate(widget.firstDate);
 
     List<DateTime> listDates = List.generate(
-        (last.difference(first).inHours / 24).round(),
-        (index) => basicDate.add(Duration(days: index)));
+      (last.difference(first).inHours / 24).round(),
+      (index) => basicDate.add(Duration(days: index)),
+    );
 
     widget.selectedDayPosition == SelectedDayPosition.left
         ? listDates.sort((b, a) => b.compareTo(a))
@@ -384,13 +329,12 @@ class CustomCalendarState extends State<CustomCalendar>
                   endDate: endDate,
                   padding: padding,
                   dateColor: widget.dateColor,
-                  dateSelectedBg: widget.calendarEventColor,
+                  dateSelectedBackgroundColor: widget.calendarEventColor,
                   dateSelectedColor: widget.calendarEventSelectedColor,
                   events: _eventDates,
                   selectedDate: _selectedDate,
                   fullCalendarDay: widget.fullCalendarDay,
                   calendarScroll: widget.fullCalendarScroll,
-                  calendarBackground: widget.calendarLogo,
                   locale: widget.locale,
                   onDateChange: (value) {
                     getDate(value);

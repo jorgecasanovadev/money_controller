@@ -1,62 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_controller/src/ui/themes/themes.dart';
+import 'package:money_controller/src/ui/utils/date_formatter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../calendar_package.dart';
 
 class FullCalendar extends StatefulWidget {
+  const FullCalendar({
+    super.key,
+    required this.startDate,
+    this.endDate,
+    this.selectedDate,
+    this.dateColor,
+    this.dateSelectedColor,
+    this.dateSelectedBackgroundColor,
+    this.padding,
+    this.locale,
+    this.fullCalendarDay,
+    this.calendarScroll,
+    this.calendarBackgroundLogo,
+    this.events,
+    required this.onDateChange,
+  });
+
   final DateTime startDate;
   final DateTime? endDate;
   final DateTime? selectedDate;
   final Color? dateColor;
   final Color? dateSelectedColor;
-  final Color? dateSelectedBg;
+  final Color? dateSelectedBackgroundColor;
   final double? padding;
   final String? locale;
   final WeekDay? fullCalendarDay;
   final FullCalendarScroll? calendarScroll;
-  final Widget? calendarBackground;
+  final Widget? calendarBackgroundLogo;
   final List<String>? events;
   final Function onDateChange;
 
-  const FullCalendar({
-    Key? key,
-    this.endDate,
-    required this.startDate,
-    required this.padding,
-    required this.onDateChange,
-    this.calendarBackground,
-    this.events,
-    this.dateColor,
-    this.dateSelectedColor,
-    this.dateSelectedBg,
-    this.locale,
-    this.selectedDate,
-    this.fullCalendarDay,
-    this.calendarScroll,
-  }) : super(key: key);
   @override
-  _FullCalendarState createState() => _FullCalendarState();
+  State<FullCalendar> createState() => _FullCalendarState();
 }
 
 class _FullCalendarState extends State<FullCalendar> {
+  // Datess
+  late DateTime startDate;
   late DateTime endDate;
 
-  late DateTime startDate;
+  // Page controllers
   late int _initialPage;
+  late PageController _horizontalScroll;
 
   List<String>? _events = [];
-
-  late PageController _horizontalScroll;
 
   @override
   void initState() {
     setState(() {
-      startDate = DateTime.parse(
-          "${widget.startDate.toString().split(" ").first} 00:00:00.000");
-
-      endDate = DateTime.parse(
-          "${widget.endDate.toString().split(" ").first} 23:00:00.000");
+      startDate = DateFormatter.formatByTimeHour(widget.startDate, '00');
+      endDate = DateFormatter.formatByTimeHour(widget.startDate, '23');
 
       _events = widget.events;
     });
@@ -93,8 +94,12 @@ class _FullCalendarState extends State<FullCalendar> {
 
     if (firstDate.year == lastDate.year && firstDate.month == lastDate.month) {
       return Padding(
-        padding:
-            EdgeInsets.fromLTRB(widget.padding!, 40.0, widget.padding!, 0.0),
+        padding: EdgeInsets.fromLTRB(
+          widget.padding!,
+          40.0,
+          widget.padding!,
+          0.0,
+        ),
         child: month(dates, width, widget.locale, widget.fullCalendarDay),
       );
     } else {
@@ -121,7 +126,7 @@ class _FullCalendarState extends State<FullCalendar> {
                 children: [
                   Opacity(
                     opacity: 0.2,
-                    child: Center(child: widget.calendarBackground),
+                    child: Center(child: widget.calendarBackgroundLogo),
                   ),
                   PageView.builder(
                     physics: const BouncingScrollPhysics(),
@@ -181,7 +186,7 @@ class _FullCalendarState extends State<FullCalendar> {
                 children: [
                   Opacity(
                     opacity: 0.2,
-                    child: Center(child: widget.calendarBackground),
+                    child: Center(child: widget.calendarBackgroundLogo),
                   ),
                   ScrollablePositionedList.builder(
                     initialScrollIndex: index,
@@ -202,8 +207,12 @@ class _FullCalendarState extends State<FullCalendar> {
 
                       return Container(
                         padding: EdgeInsets.only(bottom: isLast ? 0.0 : 25.0),
-                        child: month(daysOfMonth, width, widget.locale,
-                            widget.fullCalendarDay),
+                        child: month(
+                          daysOfMonth,
+                          width,
+                          widget.locale,
+                          widget.fullCalendarDay,
+                        ),
                       );
                     },
                   ),
@@ -253,51 +262,55 @@ class _FullCalendarState extends State<FullCalendar> {
   }
 
   Widget dateInCalendar(
-      DateTime date, bool outOfRange, double width, bool event) {
+    DateTime date,
+    bool outOfRange,
+    double width,
+    bool event,
+  ) {
     bool isSelectedDate = date.toString().split(" ").first ==
         widget.selectedDate.toString().split(" ").first;
-    return Container(
-      child: GestureDetector(
-        onTap: () => outOfRange ? null : widget.onDateChange(date),
-        child: Container(
-          width: width / 7,
-          height: width / 7,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isSelectedDate ? widget.dateSelectedBg : Colors.transparent,
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 5.0,
+    return GestureDetector(
+      onTap: () => outOfRange ? null : widget.onDateChange(date),
+      child: Container(
+        width: width / 7,
+        height: width / 7,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelectedDate
+              ? widget.dateSelectedBackgroundColor
+              : Colors.transparent,
+        ),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 5.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Text(
+                DateFormat("dd").format(date),
+                style: TextStyle(
+                    color: outOfRange
+                        ? isSelectedDate
+                            ? widget.dateSelectedColor!.withOpacity(0.9)
+                            : widget.dateColor!.withOpacity(0.4)
+                        : isSelectedDate
+                            ? widget.dateSelectedColor
+                            : widget.dateColor),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Text(
-                  DateFormat("dd").format(date),
-                  style: TextStyle(
-                      color: outOfRange
-                          ? isSelectedDate
-                              ? widget.dateSelectedColor!.withOpacity(0.9)
-                              : widget.dateColor!.withOpacity(0.4)
-                          : isSelectedDate
-                              ? widget.dateSelectedColor
-                              : widget.dateColor),
-                ),
-              ),
-              event
-                  ? Icon(
-                      Icons.bookmark,
-                      size: 8,
-                      color: isSelectedDate
-                          ? widget.dateSelectedColor
-                          : widget.dateSelectedBg,
-                    )
-                  : const SizedBox(height: 5.0),
-            ],
-          ),
+            ),
+            event
+                ? Icon(
+                    Icons.bookmark,
+                    size: 8,
+                    color: isSelectedDate
+                        ? widget.dateSelectedColor
+                        : widget.dateSelectedBackgroundColor,
+                  )
+                : const SizedBox(height: 5.0),
+          ],
         ),
       ),
     );
@@ -307,64 +320,59 @@ class _FullCalendarState extends State<FullCalendar> {
     DateTime first = dates.first;
     while (DateFormat("E").format(dates.first) != "Mon") {
       dates.add(dates.first.subtract(const Duration(days: 1)));
-
       dates.sort();
     }
 
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            DateFormat.yMMMM(Locale(locale!).toString()).format(first),
-            style: TextStyle(
-                fontSize: 18.0,
-                color: widget.dateColor,
-                fontWeight: FontWeight.w400),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
-            child: daysOfWeek(width, widget.locale, widget.fullCalendarDay),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 10.0),
-            height: dates.length > 28
-                ? dates.length > 35
-                    ? 6.2 * width / 7
-                    : 5.2 * width / 7
-                : 4 * width / 7,
-            width: MediaQuery.of(context).size.width - 2 * widget.padding!,
-            child: GridView.builder(
-              itemCount: dates.length,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 7),
-              itemBuilder: (context, index) {
-                DateTime date = dates[index];
-
-                bool outOfRange =
-                    date.isBefore(startDate) || date.isAfter(endDate);
-
-                if (date.isBefore(first)) {
-                  return Container(
-                    width: width / 7,
-                    height: width / 7,
-                    color: Colors.transparent,
-                  );
-                } else {
-                  return dateInCalendar(
-                    date,
-                    outOfRange,
-                    width,
-                    _events!.contains(date.toString().split(" ").first) &&
-                        !outOfRange,
-                  );
-                }
-              },
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          DateFormat.yMMMM(Locale(locale!).toString()).format(first),
+          style: TypographyStyle.b3.w400.copyWith(color: widget.dateColor),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 30.0),
+          child: daysOfWeek(width, widget.locale, widget.fullCalendarDay),
+        ),
+        Container(
+          padding: const EdgeInsets.only(top: 10.0),
+          height: dates.length > 28
+              ? dates.length > 35
+                  ? 6.2 * width / 7
+                  : 5.2 * width / 7
+              : 4 * width / 7,
+          width: MediaQuery.of(context).size.width - 2 * widget.padding!,
+          child: GridView.builder(
+            itemCount: dates.length,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
             ),
-          )
-        ],
-      ),
+            itemBuilder: (context, index) {
+              DateTime date = dates[index];
+
+              bool outOfRange =
+                  date.isBefore(startDate) || date.isAfter(endDate);
+
+              if (date.isBefore(first)) {
+                return Container(
+                  width: width / 7,
+                  height: width / 7,
+                  color: transparent,
+                );
+              } else {
+                return dateInCalendar(
+                  date,
+                  outOfRange,
+                  width,
+                  _events!.contains(date.toString().split(" ").first) &&
+                      !outOfRange,
+                );
+              }
+            },
+          ),
+        )
+      ],
     );
   }
 }

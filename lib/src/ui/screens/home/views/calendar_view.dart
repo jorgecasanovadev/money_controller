@@ -54,15 +54,12 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.sizeOf(context);
-
     return Scaffold(
       backgroundColor: grey200.withOpacity(0),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              // height: media.width,
               decoration: BoxDecoration(
                 color: bluegrey.withOpacity(0.3),
                 borderRadius: const BorderRadius.only(
@@ -112,7 +109,9 @@ class _CalendarViewState extends State<CalendarView> {
                                   color: white,
                                   size: 16.0,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  calendarController.openCalendar();
+                                },
                               ),
                             ],
                           ),
@@ -122,7 +121,7 @@ class _CalendarViewState extends State<CalendarView> {
                     CustomCalendar(
                       backgroundColor: transparent,
                       controller: calendarController,
-                      weekDay: WeekDay.short,
+                      weekDay: WeekDay.long,
                       fullCalendarDay: WeekDay.short,
                       selectedDateColor: darkBlueGrey,
                       initialDate: DateTime.now(),
@@ -142,24 +141,21 @@ class _CalendarViewState extends State<CalendarView> {
                         color: grey200.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      selectedDayLogo: Container(
-                        width: 6.0,
-                        height: 6.0,
-                        decoration: BoxDecoration(
-                          color: red50,
-                          borderRadius: BorderRadius.circular(
-                            10.0,
-                          ),
-                        ),
-                        child: const Icon(
-                          FontAwesomeIcons.calendarCheck,
-                          color: red,
+                      selectedEventIcon: const Icon(
+                        FontAwesomeIcons.calendarCheck,
+                        color: darkBlueGrey,
+                      ),
+                      eventIcon: Container(
+                        width: 8.0,
+                        height: 8.0,
+                        decoration: const BoxDecoration(
+                          color: green500,
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
                       ),
                       onDateSelected: (date) {
-                        setState(() {
-                          selectedDate = date;
-                        });
+                        selectedDate = date;
+                        setState(() {});
                       },
                     ),
                   ],

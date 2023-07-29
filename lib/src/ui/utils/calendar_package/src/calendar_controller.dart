@@ -17,6 +17,6 @@ class CalendarController {
   }
 
   void openCalendar() {
-    state!.showFullCalendar();
+    state?.showFullCalendar();
   }
 }

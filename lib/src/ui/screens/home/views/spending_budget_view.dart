@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,9 +69,6 @@ class _SpendingBudgetViewState extends State<SpendingBudgetView> {
           value: maxExpenses - double.parse(budget['spend_amount']),
         ),
       );
-    }
-    for (var arcModel in arcModels) {
-      log('values: ${arcModel.value}');
     }
   }
 
