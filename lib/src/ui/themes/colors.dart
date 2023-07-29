@@ -203,6 +203,7 @@ Color red400 = Colors.red[400]!;
 Color redAccent = Colors.redAccent;
 
 const Color white = Colors.white;
+const Color transparent = Colors.transparent;
 
 Color green700 = Colors.green[700]!;
 

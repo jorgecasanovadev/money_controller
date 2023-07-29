@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:money_controller/src/ui/screens/home/components/buttons/custom_segment_button.dart';
 import 'package:money_controller/src/ui/screens/home/components/view_tabs/subscription_cell.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
+import 'package:money_controller/src/ui/utils/calendar_package/calendar_package.dart';
 
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
@@ -11,6 +15,12 @@ class CalendarView extends StatefulWidget {
 }
 
 class _CalendarViewState extends State<CalendarView> {
+  // Calendar Package
+  final CalendarController calendarController = CalendarController();
+  late DateTime selectedDate;
+  Random random = Random();
+
+  // Subscriptions variables
   bool isSubscription = true;
   List<Map<String, String>> subscriptions = [
     {
@@ -36,6 +46,13 @@ class _CalendarViewState extends State<CalendarView> {
   ];
 
   @override
+  void initState() {
+    selectedDate = DateTime.now();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
 
@@ -45,7 +62,7 @@ class _CalendarViewState extends State<CalendarView> {
         child: Column(
           children: [
             Container(
-              height: media.width * 1.1,
+              // height: media.width,
               decoration: BoxDecoration(
                 color: bluegrey.withOpacity(0.3),
                 borderRadius: const BorderRadius.only(
@@ -101,6 +118,49 @@ class _CalendarViewState extends State<CalendarView> {
                           ),
                         ],
                       ),
+                    ),
+                    CustomCalendar(
+                      backgroundColor: transparent,
+                      controller: calendarController,
+                      weekDay: WeekDay.short,
+                      fullCalendarDay: WeekDay.short,
+                      selectedDateColor: darkBlueGrey,
+                      initialDate: DateTime.now(),
+                      firstDate:
+                          DateTime.now().subtract(const Duration(days: 90)),
+                      lastDate: DateTime.now().add(const Duration(days: 120)),
+                      events: List.generate(
+                        100,
+                        (index) => DateTime.now().subtract(
+                          Duration(days: index * random.nextInt(5)),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: grey.withOpacity(0.15),
+                        ),
+                        color: grey200.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      selectedDayLogo: Container(
+                        width: 6.0,
+                        height: 6.0,
+                        decoration: BoxDecoration(
+                          color: red50,
+                          borderRadius: BorderRadius.circular(
+                            10.0,
+                          ),
+                        ),
+                        child: const Icon(
+                          FontAwesomeIcons.calendarCheck,
+                          color: red,
+                        ),
+                      ),
+                      onDateSelected: (date) {
+                        setState(() {
+                          selectedDate = date;
+                        });
+                      },
                     ),
                   ],
                 ),
