@@ -47,9 +47,8 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   void initState() {
-    selectedDate = DateTime.now();
-
     super.initState();
+    selectedDate = DateTime.now();
   }
 
   @override
@@ -85,6 +84,20 @@ class _CalendarViewState extends State<CalendarView> {
                               ),
                             ],
                           ),
+                          // Row(
+                          //   children: [
+                          //     const Spacer(),
+                          //     IconButton(
+                          //       onPressed: () {},
+                          //       icon: Image.asset(
+                          //         "assets/img/settings.png",
+                          //         width: 25,
+                          //         height: 25,
+                          //         color: grey100,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                           const SizedBox(height: 20.0),
                           Text(
                             'Subscriptions\nSchedule',
@@ -119,15 +132,16 @@ class _CalendarViewState extends State<CalendarView> {
                       ),
                     ),
                     CustomCalendar(
-                      backgroundColor: transparent,
                       controller: calendarController,
+                      backgroundColor: transparent,
+                      fullCalendarBackgroundColor: bluegrey400,
                       weekDay: WeekDay.long,
                       fullCalendarDay: WeekDay.short,
                       selectedDateColor: darkBlueGrey,
                       initialDate: DateTime.now(),
                       firstDate:
-                          DateTime.now().subtract(const Duration(days: 90)),
-                      lastDate: DateTime.now().add(const Duration(days: 120)),
+                          DateTime.now().subtract(const Duration(days: 140)),
+                      lastDate: DateTime.now().add(const Duration(days: 140)),
                       events: List.generate(
                         100,
                         (index) => DateTime.now().subtract(

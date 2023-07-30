@@ -19,7 +19,7 @@ class FullCalendar extends StatefulWidget {
     this.locale,
     this.fullCalendarDay,
     this.calendarScroll,
-    this.calendarBackgroundLogo,
+    this.calendarBackground,
     this.events,
     required this.onDateChange,
   });
@@ -34,7 +34,7 @@ class FullCalendar extends StatefulWidget {
   final String? locale;
   final WeekDay? fullCalendarDay;
   final FullCalendarScroll? calendarScroll;
-  final Widget? calendarBackgroundLogo;
+  final Widget? calendarBackground;
   final List<String>? events;
   final Function onDateChange;
 
@@ -100,7 +100,12 @@ class _FullCalendarState extends State<FullCalendar> {
           widget.padding!,
           0.0,
         ),
-        child: month(dates, width, widget.locale, widget.fullCalendarDay),
+        child: month(
+          dates: dates,
+          width: width,
+          locale: widget.locale,
+          weekday: widget.fullCalendarDay,
+        ),
       );
     } else {
       List<DateTime?> months = [];
@@ -126,7 +131,7 @@ class _FullCalendarState extends State<FullCalendar> {
                 children: [
                   Opacity(
                     opacity: 0.2,
-                    child: Center(child: widget.calendarBackgroundLogo),
+                    child: Center(child: widget.calendarBackground),
                   ),
                   PageView.builder(
                     physics: const BouncingScrollPhysics(),
@@ -148,8 +153,12 @@ class _FullCalendarState extends State<FullCalendar> {
 
                       return Container(
                         padding: EdgeInsets.only(bottom: isLast ? 0.0 : 10.0),
-                        child: month(daysOfMonth, width, widget.locale,
-                            widget.fullCalendarDay),
+                        child: month(
+                          dates: daysOfMonth,
+                          width: width,
+                          locale: widget.locale,
+                          weekday: widget.fullCalendarDay,
+                        ),
                       );
                     },
                   ),
@@ -186,7 +195,7 @@ class _FullCalendarState extends State<FullCalendar> {
                 children: [
                   Opacity(
                     opacity: 0.2,
-                    child: Center(child: widget.calendarBackgroundLogo),
+                    child: Center(child: widget.calendarBackground),
                   ),
                   ScrollablePositionedList.builder(
                     initialScrollIndex: index,
@@ -208,10 +217,10 @@ class _FullCalendarState extends State<FullCalendar> {
                       return Container(
                         padding: EdgeInsets.only(bottom: isLast ? 0.0 : 25.0),
                         child: month(
-                          daysOfMonth,
-                          width,
-                          widget.locale,
-                          widget.fullCalendarDay,
+                          dates: daysOfMonth,
+                          width: width,
+                          locale: widget.locale,
+                          weekday: widget.fullCalendarDay,
                         ),
                       );
                     },
@@ -222,7 +231,11 @@ class _FullCalendarState extends State<FullCalendar> {
     }
   }
 
-  Widget daysOfWeek(double width, String? locale, WeekDay? weekday) {
+  Widget daysOfWeek({
+    required double width,
+    String? locale,
+    WeekDay? weekday,
+  }) {
     List daysNames = [];
     for (var day = 12; day <= 18; day++) {
       weekday == WeekDay.long
@@ -252,21 +265,18 @@ class _FullCalendarState extends State<FullCalendar> {
       alignment: Alignment.center,
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 12.0,
-          fontWeight: FontWeight.w400,
-        ),
+        style: TypographyStyle.overline.w700,
         overflow: TextOverflow.ellipsis,
       ),
     );
   }
 
-  Widget dateInCalendar(
-    DateTime date,
-    bool outOfRange,
-    double width,
-    bool event,
-  ) {
+  Widget dateInCalendar({
+    required double width,
+    required DateTime date,
+    required bool outOfRange,
+    required bool event,
+  }) {
     bool isSelectedDate = date.toString().split(" ").first ==
         widget.selectedDate.toString().split(" ").first;
     return GestureDetector(
@@ -276,38 +286,39 @@ class _FullCalendarState extends State<FullCalendar> {
         height: width / 7,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isSelectedDate
-              ? widget.dateSelectedBackgroundColor
-              : Colors.transparent,
+          color:
+              isSelectedDate ? widget.dateSelectedBackgroundColor : transparent,
         ),
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 5.0,
-            ),
+            const SizedBox(height: 5.0),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Text(
                 DateFormat("dd").format(date),
                 style: TextStyle(
-                    color: outOfRange
-                        ? isSelectedDate
-                            ? widget.dateSelectedColor!.withOpacity(0.9)
-                            : widget.dateColor!.withOpacity(0.4)
-                        : isSelectedDate
-                            ? widget.dateSelectedColor
-                            : widget.dateColor),
+                  color: outOfRange
+                      ? isSelectedDate
+                          ? widget.dateSelectedColor!.withOpacity(0.9)
+                          : widget.dateColor!.withOpacity(0.4)
+                      : isSelectedDate
+                          ? widget.dateSelectedColor
+                          : widget.dateColor,
+                ),
               ),
             ),
             event
-                ? Icon(
-                    Icons.bookmark,
-                    size: 8,
-                    color: isSelectedDate
-                        ? widget.dateSelectedColor
-                        : widget.dateSelectedBackgroundColor,
+                ? Container(
+                    width: 5.0,
+                    height: 5.0,
+                    decoration: BoxDecoration(
+                      color: isSelectedDate
+                          ? widget.dateSelectedColor!.withOpacity(0.9)
+                          : widget.dateSelectedBackgroundColor,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
                   )
                 : const SizedBox(height: 5.0),
           ],
@@ -316,7 +327,12 @@ class _FullCalendarState extends State<FullCalendar> {
     );
   }
 
-  Widget month(List dates, double width, String? locale, WeekDay? weekday) {
+  Widget month({
+    required List dates,
+    required double width,
+    String? locale,
+    WeekDay? weekday,
+  }) {
     DateTime first = dates.first;
     while (DateFormat("E").format(dates.first) != "Mon") {
       dates.add(dates.first.subtract(const Duration(days: 1)));
@@ -328,11 +344,15 @@ class _FullCalendarState extends State<FullCalendar> {
       children: [
         Text(
           DateFormat.yMMMM(Locale(locale!).toString()).format(first),
-          style: TypographyStyle.b3.w400.copyWith(color: widget.dateColor),
+          style: TypographyStyle.b3.w700.copyWith(color: widget.dateColor),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 30.0),
-          child: daysOfWeek(width, widget.locale, widget.fullCalendarDay),
+          child: daysOfWeek(
+            width: width,
+            locale: widget.locale,
+            weekday: widget.fullCalendarDay,
+          ),
         ),
         Container(
           padding: const EdgeInsets.only(top: 10.0),
@@ -362,10 +382,10 @@ class _FullCalendarState extends State<FullCalendar> {
                 );
               } else {
                 return dateInCalendar(
-                  date,
-                  outOfRange,
-                  width,
-                  _events!.contains(date.toString().split(" ").first) &&
+                  width: width,
+                  date: date,
+                  outOfRange: outOfRange,
+                  event: _events!.contains(date.toString().split(" ").first) &&
                       !outOfRange,
                 );
               }

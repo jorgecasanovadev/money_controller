@@ -31,6 +31,9 @@ class CustomCalendar extends StatefulWidget implements PreferredSizeWidget {
   final Color? unselectedDateColor;
   final Color? calendarEventSelectedColor;
   final Color? calendarEventColor;
+  final Color? fullCalendarBackgroundColor;
+  final Widget? calendarLogo;
+  final Widget? selectedDayLogo;
   final Widget? eventIcon;
   final Widget? selectedEventIcon;
   final Decoration? decoration;
@@ -60,6 +63,9 @@ class CustomCalendar extends StatefulWidget implements PreferredSizeWidget {
     this.unselectedDateColor = white,
     this.calendarEventSelectedColor = white,
     this.calendarEventColor = blue500,
+    this.fullCalendarBackgroundColor = grey200,
+    this.calendarLogo,
+    this.selectedDayLogo,
     this.locale = 'en',
     this.padding,
     this.leading,
@@ -71,7 +77,7 @@ class CustomCalendar extends StatefulWidget implements PreferredSizeWidget {
     this.fullCalendarDay = WeekDay.short,
     this.weekDay = WeekDay.short,
     this.selectedDayPosition = SelectedDayPosition.left,
-    //TODO: change to translations
+    //TODO: change to translations file
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
@@ -142,7 +148,7 @@ class CustomCalendarState extends State<CustomCalendar>
                   horizontal: MediaQuery.of(context).size.width *
                       (5 - _dates.length) /
                       10)
-              : const EdgeInsets.symmetric(horizontal: 10),
+              : const EdgeInsets.symmetric(horizontal: 10.0),
           initialScrollIndex: _daySelectedIndex ?? 0,
           initialAlignment:
               widget.selectedDayPosition == SelectedDayPosition.center
@@ -264,7 +270,7 @@ class CustomCalendarState extends State<CustomCalendar>
     );
   }
 
-  _generateDates() {
+  void _generateDates() {
     _dates.clear();
 
     DateTime first = DateFormatter.formatByTimeHour(widget.firstDate, '00');
@@ -289,6 +295,7 @@ class CustomCalendarState extends State<CustomCalendar>
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      backgroundColor: widget.fullCalendarBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0),
@@ -335,6 +342,7 @@ class CustomCalendarState extends State<CustomCalendar>
                   selectedDate: _selectedDate,
                   fullCalendarDay: widget.fullCalendarDay,
                   calendarScroll: widget.fullCalendarScroll,
+                  calendarBackground: widget.calendarLogo,
                   locale: widget.locale,
                   onDateChange: (value) {
                     getDate(value);
@@ -349,7 +357,7 @@ class CustomCalendarState extends State<CustomCalendar>
     );
   }
 
-  _selectedDay() {
+  void _selectedDay() {
     DateTime getSelected = DateTime.parse(
         "${_selectedDate.toString().split(" ").first} 00:00:00.000");
 
@@ -358,7 +366,7 @@ class CustomCalendarState extends State<CustomCalendar>
         getSelected));
   }
 
-  _goToActualDay(int index) {
+  void _goToActualDay(int index) {
     _moveToDayIndex(index);
     setState(() {
       _daySelectedIndex = index;
@@ -386,7 +394,7 @@ class CustomCalendarState extends State<CustomCalendar>
     _goToActualDay(_daySelectedIndex!);
   }
 
-  _initCalendar() {
+  void _initCalendar() {
     if (widget.controller != null && widget.controller is CalendarController) {
       widget.controller!.bindState(this);
     }
