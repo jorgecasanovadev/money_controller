@@ -250,7 +250,7 @@ class CustomCalendarState extends State<CustomCalendar>
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: widget.appbar ? 210 : 150.0,
+      height: widget.appbar ? 210 : 120.0,
       child: Stack(
         children: [
           Positioned(
