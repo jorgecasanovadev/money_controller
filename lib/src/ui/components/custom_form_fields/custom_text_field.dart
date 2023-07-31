@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../themes/themes.dart';
 
-class CustomTextField extends StatefulWidget {
+class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.title,
     this.controller,
     this.keyboardType,
+    this.textAlign = TextAlign.left,
     this.isVisible = false,
     this.isShowPassword = false,
   });
@@ -15,22 +16,25 @@ class CustomTextField extends StatefulWidget {
   final String title;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final TextAlign? textAlign;
   final bool isVisible;
   final bool isShowPassword;
 
-  @override
-  State<CustomTextField> createState() => _CustomTextFieldState();
-}
-
-class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.title,
-          style: TypographyStyle.st4.grey100,
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                textAlign: textAlign,
+                style: TypographyStyle.st4.grey100,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 5.0),
         Container(
@@ -47,13 +51,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextFormField(
               style: TypographyStyle.st165.white.w600.s20,
-              controller: widget.controller,
+              controller: controller,
               decoration: const InputDecoration(
                 focusedBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 enabledBorder: InputBorder.none,
               ),
-              keyboardType: widget.keyboardType,
+              keyboardType: keyboardType,
             ),
           ),
         ),

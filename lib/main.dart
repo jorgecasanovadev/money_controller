@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_controller/src/data/blocs/authentication/authentication_bloc.dart';
+import 'package:money_controller/src/ui/screens/add_subscription/add_subscription_screen.dart';
 import 'package:money_controller/src/ui/screens/home/home_screen.dart';
 import 'package:money_controller/src/ui/screens/welcome/welcome_screen.dart';
 import 'package:money_controller/src/ui/screens/login/login_screen.dart';
@@ -56,13 +57,25 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
-            return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+            return MaterialPageRoute(
+              builder: (_) => const WelcomeScreen(),
+            );
           case '/login':
-            return MaterialPageRoute(builder: (_) => const LoginScreen());
+            return MaterialPageRoute(
+              builder: (_) => const LoginScreen(),
+            );
           case '/sign_in_up':
-            return MaterialPageRoute(builder: (_) => const SignInUpScreen());
+            return MaterialPageRoute(
+              builder: (_) => const SignInUpScreen(),
+            );
           case '/home':
-            return MaterialPageRoute(builder: (_) => const HomeScreen());
+            return MaterialPageRoute(
+              builder: (_) => const HomeScreen(),
+            );
+          case '/add_subscription':
+            return MaterialPageRoute(
+              builder: (_) => const AddSubscriptionScreen(),
+            );
 
           default:
             ErrorWidget.builder = (FlutterErrorDetails errorDetails) {

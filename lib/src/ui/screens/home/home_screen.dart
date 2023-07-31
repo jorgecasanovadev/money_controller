@@ -37,7 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Floating Action Button
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(
+          context,
+          '/add_subscription',
+        ),
         backgroundColor: darkBlueGrey,
         child: const Icon(Icons.add),
       ),

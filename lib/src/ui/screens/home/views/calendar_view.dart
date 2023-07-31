@@ -1,11 +1,10 @@
-import 'dart:math';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:money_controller/src/ui/screens/home/components/buttons/custom_segment_button.dart';
+import 'package:money_controller/src/ui/screens/home/components/buttons/segment_button.dart';
 import 'package:money_controller/src/ui/screens/home/components/view_tabs/subscription_cell.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
-import 'package:money_controller/src/ui/utils/calendar_package/calendar_package.dart';
+import 'package:money_controller/src/ui/utils/input_formatter.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
@@ -15,10 +14,9 @@ class CalendarView extends StatefulWidget {
 }
 
 class _CalendarViewState extends State<CalendarView> {
-  // Calendar Package
-  final CalendarController calendarController = CalendarController();
-  late DateTime selectedDate;
-  Random random = Random();
+  // Calendar controllers
+  DateTime _selectedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
 
   // Subscriptions variables
   bool isSubscription = true;
@@ -39,7 +37,7 @@ class _CalendarViewState extends State<CalendarView> {
       'price': '29.99',
     },
     {
-      'name': 'Amazon Prime',
+      'name': 'Prime Video',
       'icon': 'assets/imgs/prime-video-logo.png',
       'price': '14.00',
     },
@@ -48,7 +46,6 @@ class _CalendarViewState extends State<CalendarView> {
   @override
   void initState() {
     super.initState();
-    selectedDate = DateTime.now();
   }
 
   @override
@@ -88,7 +85,9 @@ class _CalendarViewState extends State<CalendarView> {
                           //   children: [
                           //     const Spacer(),
                           //     IconButton(
-                          //       onPressed: () {},
+                          //       onPressed: () {
+                          //         //TODO: Agregar pantalla de configuracion
+                          //       },
                           //       icon: Image.asset(
                           //         "assets/img/settings.png",
                           //         width: 25,
@@ -123,7 +122,7 @@ class _CalendarViewState extends State<CalendarView> {
                                   size: 16.0,
                                 ),
                                 onPressed: () {
-                                  calendarController.openCalendar();
+                                  //TODO: Controlador de expansion de calendario
                                 },
                               ),
                             ],
@@ -131,47 +130,69 @@ class _CalendarViewState extends State<CalendarView> {
                         ],
                       ),
                     ),
-                    CustomCalendar(
-                      controller: calendarController,
-                      backgroundColor: transparent,
-                      fullCalendarBackgroundColor: bluegrey400,
-                      weekDay: WeekDay.long,
-                      fullCalendarDay: WeekDay.short,
-                      selectedDateColor: darkBlueGrey,
-                      initialDate: DateTime.now(),
-                      firstDate:
-                          DateTime.now().subtract(const Duration(days: 140)),
-                      lastDate: DateTime.now().add(const Duration(days: 140)),
-                      events: List.generate(
-                        100,
-                        (index) => DateTime.now().subtract(
-                          Duration(days: index * random.nextInt(5)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0,
+                        vertical: 30.0,
+                      ),
+                      child: TableCalendar(
+                        headerVisible: false,
+                        pageJumpingEnabled: true,
+                        focusedDay: DateTime.now(),
+                        firstDay:
+                            DateTime.now().subtract(const Duration(days: 90)),
+                        lastDay: DateTime.now().add(const Duration(days: 90)),
+                        selectedDayPredicate: (day) {
+                          return isSameDay(_selectedDay, day);
+                        },
+                        onDaySelected: (selectedDay, focusedDay) {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                          setState(() {});
+                        },
+                        calendarFormat: CalendarFormat.week,
+                        calendarStyle: CalendarStyle(
+                          selectedTextStyle: TypographyStyle.st4.white,
+                          selectedDecoration: const BoxDecoration(
+                            color: darkBlueGrey,
+                            shape: BoxShape.circle,
+                          ),
+                          todayDecoration: const BoxDecoration(
+                            color: grey100,
+                            shape: BoxShape.circle,
+                          ),
+                          todayTextStyle: TypographyStyle.st1.w800.white,
+                          defaultDecoration: const BoxDecoration(
+                            color: transparent,
+                          ),
+                          defaultTextStyle: TypographyStyle.st2.grey50.w500,
+                        ),
+                        calendarBuilders: CalendarBuilders(
+                          dowBuilder: (context, day) {
+                            if (day.day == DateTime.now().day) {
+                              final text = DateFormat.E().format(day);
+
+                              return Center(
+                                child: Text(
+                                  text.capitalize(),
+                                  style: TypographyStyle.st3.w800.white,
+                                ),
+                              );
+                            } else {
+                              final text = DateFormat.E().format(day);
+
+                              return Center(
+                                child: Text(
+                                  text.capitalize(),
+                                  style: TypographyStyle.st2.grey50.w500,
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: grey.withOpacity(0.15),
-                        ),
-                        color: grey200.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      selectedEventIcon: const Icon(
-                        FontAwesomeIcons.calendarCheck,
-                        color: darkBlueGrey,
-                      ),
-                      eventIcon: Container(
-                        width: 8.0,
-                        height: 8.0,
-                        decoration: const BoxDecoration(
-                          color: green500,
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        ),
-                      ),
-                      onDateSelected: (date) {
-                        selectedDate = date;
-                        setState(() {});
-                      },
                     ),
+                    // TODO: Agregar el calendario
                   ],
                 ),
               ),

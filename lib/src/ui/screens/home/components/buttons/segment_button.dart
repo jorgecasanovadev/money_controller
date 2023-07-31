@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../themes/themes.dart';
 
-class CustomSegmentButton extends StatelessWidget {
-  const CustomSegmentButton({
+class SegmentButton extends StatelessWidget {
+  const SegmentButton({
     super.key,
     required this.title,
     this.isActive = true,

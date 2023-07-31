@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../themes/themes.dart';
 
-class CustomStatusButton extends StatelessWidget {
-  const CustomStatusButton({
+class StatusButton extends StatelessWidget {
+  const StatusButton({
     super.key,
     required this.title,
     required this.value,

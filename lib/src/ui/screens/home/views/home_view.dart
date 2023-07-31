@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:money_controller/src/ui/screens/home/components/buttons/status_button.dart';
 import 'package:money_controller/src/ui/screens/home/components/view_tabs/arc_painter_view.dart';
 import 'package:money_controller/src/ui/components/views/logo_view.dart';
-import 'package:money_controller/src/ui/screens/home/components/buttons/custom_segment_button.dart';
-import 'package:money_controller/src/ui/screens/home/components/buttons/custom_status_button.dart';
+import 'package:money_controller/src/ui/screens/home/components/buttons/segment_button.dart';
 import 'package:money_controller/src/ui/screens/home/components/view_tabs/subscription_tab.dart';
 import 'package:money_controller/src/ui/screens/home/components/view_tabs/upcoming_bill_tab.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
@@ -33,7 +33,7 @@ class _HomeViewState extends State<HomeView> {
       'price': '29.99',
     },
     {
-      'name': 'Amazon Prime',
+      'name': 'Prime Video',
       'icon': 'assets/imgs/prime-video-logo.png',
       'price': '14.00',
     },
@@ -56,7 +56,7 @@ class _HomeViewState extends State<HomeView> {
       'price': '29.99',
     },
     {
-      'name': 'Amazon Prime',
+      'name': 'Prime Video',
       'date': DateTime(2023, 07, 25),
       'price': '14.00',
     },
@@ -148,7 +148,7 @@ class _HomeViewState extends State<HomeView> {
                         Row(
                           children: [
                             Expanded(
-                              child: CustomStatusButton(
+                              child: StatusButton(
                                 title: 'Active \nsubscriptions',
                                 value: '12',
                                 statusColor: darkBlueGrey,
@@ -157,7 +157,7 @@ class _HomeViewState extends State<HomeView> {
                             ),
                             const SizedBox(width: 8.0),
                             Expanded(
-                              child: CustomStatusButton(
+                              child: StatusButton(
                                 title: 'Highest subscriptions',
                                 value: '\$19.90',
                                 statusColor: orange300,
@@ -166,7 +166,7 @@ class _HomeViewState extends State<HomeView> {
                             ),
                             const SizedBox(width: 8.0),
                             Expanded(
-                              child: CustomStatusButton(
+                              child: StatusButton(
                                 title: 'Lowest \nsubscriptions',
                                 value: '\$5.70',
                                 statusColor: green500,
@@ -198,7 +198,7 @@ class _HomeViewState extends State<HomeView> {
               child: Row(
                 children: [
                   Expanded(
-                    child: CustomSegmentButton(
+                    child: SegmentButton(
                       title: 'Your subscriptions',
                       isActive: isSubscription,
                       onPressed: () {
@@ -208,7 +208,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   Expanded(
-                    child: CustomSegmentButton(
+                    child: SegmentButton(
                       title: 'Upcoming bills',
                       isActive: !isSubscription,
                       onPressed: () {
