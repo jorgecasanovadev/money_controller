@@ -31,6 +31,10 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
       'name': 'Prime Video',
       'icon': 'assets/imgs/prime-video-logo.png',
     },
+    {
+      'name': 'Prime Video 2',
+      'icon': 'assets/imgs/prime-video-logo.png',
+    },
   ];
 
   @override
