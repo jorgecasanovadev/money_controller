@@ -1,5 +1,8 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:money_controller/src/ui/components/buttons/custom_primary_button.dart.dart';
+import 'package:money_controller/src/ui/screens/subscriptions/components/view_tabs/info_item_row.dart';
 
 import '../../../themes/themes.dart';
 
@@ -24,21 +27,22 @@ class _SubscriptionInfoScreenState extends State<SubscriptionInfoScreen> {
       backgroundColor: grey200.withOpacity(0),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Container(
-            margin: const EdgeInsets.all(20.0),
-            decoration: BoxDecoration(
-              color: grey50.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(24.0),
-            ),
-            child: Stack(
-              children: [
-                Column(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                margin: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: grey100.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+                child: Column(
                   children: [
                     Container(
                       height: media.width * 0.9,
                       padding: const EdgeInsets.all(12.0),
                       decoration: BoxDecoration(
-                        color: grey50.withOpacity(0.3),
+                        color: grey100.withOpacity(0.5),
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(24.0),
                           topRight: Radius.circular(24.0),
@@ -91,59 +95,101 @@ class _SubscriptionInfoScreenState extends State<SubscriptionInfoScreen> {
                       ),
                     ),
                     Container(
-                      height: media.width * 1,
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 30.0,
+                        horizontal: 20.0,
+                      ),
                       child: Column(
-                        children: <Widget>[
+                        children: [
                           Container(
-                            height: media.width * 0.89,
                             decoration: BoxDecoration(
-                              color: grey50.withOpacity(0.25),
+                              color: grey100.withOpacity(0.25),
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 20.0,
-                                    horizontal: 20.0,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Name: ',
-                                        style: TypographyStyle.st1.w600.white,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          'Name de producto',
-                                          textAlign: TextAlign.right,
-                                          style: TypographyStyle
-                                              .overline.w500.grey50,
-                                        ),
-                                      ),
-                                      // const SizedBox(width: 8.0),
-                                      IconButton(
-                                        padding: EdgeInsets.zero,
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios_outlined,
-                                          color: grey50,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                InfoItemRow(
+                                  title: 'Name',
+                                  value: widget.subscription['name']!,
+                                ),
+                                const InfoItemRow(
+                                  title: 'Description',
+                                  value: 'Music App',
+                                ),
+                                const InfoItemRow(
+                                  title: 'Category',
+                                  value: 'Enterteiment',
+                                ),
+                                const InfoItemRow(
+                                  title: 'First payment',
+                                  value: '08.07.2023',
+                                ),
+                                const InfoItemRow(
+                                  title: 'Reminder',
+                                  value: 'Never',
+                                ),
+                                const InfoItemRow(
+                                  title: 'Currency',
+                                  value: 'USD (\$)',
                                 ),
                               ],
                             ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          CustomPrimaryButton(
+                            title: 'Save',
+                            foregroundColor: white,
+                            backgroundColor: grey100.withOpacity(0.4),
+                            titleTextStyle: TypographyStyle.b3,
+                            onPressed: () {},
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                  top: 20.0,
+                  left: 4.0,
+                  right: 4.0,
+                ),
+                height: media.width * 0.9 + 15,
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 30.0,
+                      height: 30.0,
+                      decoration: BoxDecoration(
+                        color: black,
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                    Expanded(
+                      child: DottedBorder(
+                        dashPattern: const [5, 10],
+                        padding: EdgeInsets.zero,
+                        strokeWidth: 1.0,
+                        borderType: BorderType.RRect,
+                        radius: const Radius.circular(16.0),
+                        color: black50,
+                        child: const SizedBox(height: 0.0),
+                      ),
+                    ),
+                    Container(
+                      width: 30.0,
+                      height: 30.0,
+                      decoration: BoxDecoration(
+                        color: black,
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
