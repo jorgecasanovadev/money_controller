@@ -81,22 +81,21 @@ class _CalendarViewState extends State<CalendarView> {
                               ),
                             ],
                           ),
-                          // Row(
-                          //   children: [
-                          //     const Spacer(),
-                          //     IconButton(
-                          //       onPressed: () {
-                          //         //TODO: Agregar pantalla de configuracion
-                          //       },
-                          //       icon: Image.asset(
-                          //         "assets/img/settings.png",
-                          //         width: 25,
-                          //         height: 25,
-                          //         color: grey100,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
+                          Row(
+                            children: [
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () {
+                                  //TODO: Agregar pantalla de configuracion
+                                },
+                                icon: const Icon(
+                                  Icons.settings,
+                                  color: grey100,
+                                  size: 30.0,
+                                ),
+                              ),
+                            ],
+                          ),
                           const SizedBox(height: 20.0),
                           Text(
                             'Subscriptions\nSchedule',

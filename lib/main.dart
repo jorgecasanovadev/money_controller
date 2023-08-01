@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_controller/src/data/blocs/authentication/authentication_bloc.dart';
-import 'package:money_controller/src/ui/screens/add_subscription/add_subscription_screen.dart';
 import 'package:money_controller/src/ui/screens/home/home_screen.dart';
 import 'package:money_controller/src/ui/screens/welcome/welcome_screen.dart';
 import 'package:money_controller/src/ui/screens/login/login_screen.dart';
@@ -11,6 +10,7 @@ import 'package:money_controller/src/ui/screens/login/sign_in_up_screen.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
 
 import 'src/ui/screens/error/error_screen.dart';
+import 'src/ui/screens/subscriptions/views/subscription_add_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: 'lib/.env');
@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
             );
           case '/add_subscription':
             return MaterialPageRoute(
-              builder: (_) => const AddSubscriptionScreen(),
+              builder: (_) => const SubscriptionAddScreen(),
             );
 
           default:

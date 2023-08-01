@@ -5,6 +5,7 @@ import 'package:money_controller/src/ui/components/views/logo_view.dart';
 import 'package:money_controller/src/ui/screens/home/components/buttons/segment_button.dart';
 import 'package:money_controller/src/ui/screens/home/components/view_tabs/subscription_tab.dart';
 import 'package:money_controller/src/ui/screens/home/components/view_tabs/upcoming_bill_tab.dart';
+import 'package:money_controller/src/ui/screens/subscriptions/views/subscription_info_screen.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
 
 class HomeView extends StatefulWidget {
@@ -229,8 +230,15 @@ class _HomeViewState extends State<HomeView> {
                 itemBuilder: (context, index) {
                   var subscription = subscriptions[index];
                   return SubscriptionTab(
-                    onPressed: () {},
                     subscription: subscription,
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SubscriptionInfoScreen(
+                          subscription: subscription,
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),

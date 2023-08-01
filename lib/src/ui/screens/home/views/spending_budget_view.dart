@@ -65,7 +65,6 @@ class _SpendingBudgetViewState extends State<SpendingBudgetView> {
       arcModels.add(
         ArcModel(
           color: budget['color'],
-          // value: maxExpenses - double.parse(budget['left_amount']),
           value: maxExpenses - double.parse(budget['spend_amount']),
         ),
       );

@@ -5,19 +5,19 @@ import 'package:money_controller/src/ui/components/buttons/custom_primary_button
 import 'package:money_controller/src/ui/components/custom_form_fields/custom_text_field.dart';
 import 'package:money_controller/src/ui/themes/themes.dart';
 
-class AddSubscriptionScreen extends StatefulWidget {
-  const AddSubscriptionScreen({super.key});
+class SubscriptionAddScreen extends StatefulWidget {
+  const SubscriptionAddScreen({super.key});
   static const routeName = '/add_subscription';
 
   @override
-  State<AddSubscriptionScreen> createState() => _AddSubscriptionScreenState();
+  State<SubscriptionAddScreen> createState() => _SubscriptionAddScreenState();
 }
 
-class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
+class _SubscriptionAddScreenState extends State<SubscriptionAddScreen> {
   TextEditingController inputTextController = TextEditingController();
   double amountVal = 0.0;
   List<Map<String, String>> subscriptions = [
-    {'name': 'HBO Max', 'icon': 'assets/imgs/spotify-logo.png'},
+    {'name': 'Netflix', 'icon': 'assets/imgs/netflix.png'},
     {'name': 'Spotify', 'icon': 'assets/imgs/spotify-logo.png'},
     {
       'name': 'YouTube Premiun',
@@ -32,8 +32,8 @@ class _AddSubscriptionScreenState extends State<AddSubscriptionScreen> {
       'icon': 'assets/imgs/prime-video-logo.png',
     },
     {
-      'name': 'Prime Video 2',
-      'icon': 'assets/imgs/prime-video-logo.png',
+      'name': 'Disney +',
+      'icon': 'assets/imgs/disneplus.png',
     },
   ];
 
